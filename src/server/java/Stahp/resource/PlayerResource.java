@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PlayerResource {
 
-    private String uuid;
+    private String id;
 
     private String name;
 
@@ -15,16 +15,16 @@ public class PlayerResource {
     }
 
     public PlayerResource(Player player) {
-        uuid = player.getUuid();
+        id = player.getId();
         name = player.getName();
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getId() {
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

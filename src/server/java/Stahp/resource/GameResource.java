@@ -7,7 +7,7 @@ import java.util.List;
 @XmlRootElement
 public class GameResource {
 
-    private Integer id;
+    private String id;
 
     private String state;
 
@@ -17,18 +17,18 @@ public class GameResource {
         playerEntities = new ArrayList<PlayerResource>();
     }
 
-    public GameResource(Integer id, String state) {
+    public GameResource(String id, String state) {
         this.id = id;
         this.state = state;
 
         playerEntities = new ArrayList<PlayerResource>();
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

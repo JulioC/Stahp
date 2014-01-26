@@ -11,7 +11,7 @@ public class Player {
     @Id
     @GeneratedValue(generator="uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    String uuid;
+    String id;
 
     String name;
 
@@ -22,8 +22,8 @@ public class Player {
         this.name = name;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getId() {
+        return id;
     }
 
     public String getName() {
