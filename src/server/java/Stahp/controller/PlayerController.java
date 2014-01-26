@@ -25,8 +25,14 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    /**
+     * Create a new player
+     *
+     * @param name desired display name
+     * @return PlayerResource for the player created
+     */
     @POST
-    public PlayerResource newPlayer(
+    public PlayerResource createPlayer(
             @NotNull @QueryParam("name") String name) {
         Player player = new Player(name);
 
@@ -41,13 +47,19 @@ public class PlayerController {
         return new PlayerResource(player);
     }
 
+    /**
+     * Get a player's profile
+     *
+     * @param id UUID for player
+     * @return PlayerResource for player profile
+     */
     @GET
-    @Path("{uuid}")
+    @Path("{id}")
     public PlayerResource getPlayer(
-            @PathParam("uuid") String uuid) {
+            @PathParam("id") String id) {
         Player player;
         try {
-            player = playerService.findById(uuid);
+            player = playerService.findById(id);
         }
         catch (Exception e) {
             logger.error(e);
