@@ -1,11 +1,11 @@
-package Stahp.controller;
+package Stahp.resource;
 
 import Stahp.persistence.service.PlayerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GameWordController {
-    private final Logger logger = Logger.getLogger(GameController.class.getName());
+public class GameWordResource {
+    private final Logger logger = Logger.getLogger(GameResource.class.getName());
 
     private PlayerService playerService;
 
@@ -17,7 +17,7 @@ public class GameWordController {
     private String currentPlayerKey;
     private String gameId;
 
-    public GameWordController(String currentPlayerKey, String gameId) {
+    public GameWordResource(String currentPlayerKey, String gameId) {
         this.currentPlayerKey = currentPlayerKey;
         this.gameId = gameId;
     }

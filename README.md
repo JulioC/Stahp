@@ -3,7 +3,7 @@
   GET - Get your game list
 /game/{game}
   GET - Get game info
-  PUT - Apply (or start) a game
+  POST - Apply (or start) a game
 /game/{game}/words (?)
   GET - Get the game's word list
   PUT - Send a player's word list
@@ -40,3 +40,4 @@ WordResponse
 GenericDAO - https://code.google.com/p/hibernate-generic-dao/
 Jersey - https://jersey.java.net/
 
+The RESTful CookBook - http://restcookbook.com/HTTP%20Methods/put-vs-post/

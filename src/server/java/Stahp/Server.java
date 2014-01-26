@@ -1,6 +1,5 @@
 package Stahp;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -9,7 +8,6 @@ import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.ServerProperties;
 
 import javax.ws.rs.ext.ContextResolver;
 import java.io.IOException;
@@ -53,7 +51,7 @@ public class Server extends ResourceConfig {
         // Jersey configuration
         final ResourceConfig rc = new ResourceConfig()
                 // Base package for public resources
-                .packages(false, "Stahp.controller")
+                .packages(false, "Stahp.resource")
                 // Send validation errors to the client.
 //                .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 // Add JSON media output
@@ -62,7 +60,7 @@ public class Server extends ResourceConfig {
         // Create Grizzly server
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
 
-        // Initialize and add Spring-aware Jersey controller
+        // Initialize and add Spring-aware Jersey resource
         WebappContext ctx = new WebappContext("context", "/");
         ServletRegistration reg = ctx.addServlet("spring", org.glassfish.jersey.servlet.ServletContainer.class);
         reg.addMapping("/*");

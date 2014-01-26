@@ -1,37 +1,81 @@
 package Stahp.resource;
 
+
+import Stahp.entity.PlayerEntity;
 import Stahp.persistence.dto.Player;
+import Stahp.persistence.service.PlayerService;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
 
-@XmlRootElement
+@Path("players")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PlayerResource {
 
-    private String id;
+    private final Logger logger = Logger.getLogger(GameResource.class.getName());
 
-    private String name;
+    private PlayerService playerService;
 
-    public PlayerResource() {
+    @Autowired
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
-    public PlayerResource(Player player) {
-        id = player.getId();
-        name = player.getName();
+    @Context
+    private UriInfo uriInfo;
+
+    /**
+     * Create a new player
+     *
+     * @param name desired display name
+     * @return Response 201 with created player location
+     */
+    @POST
+    public Response createPlayer(
+            @NotNull @QueryParam("name") String name) {
+        Player player = new Player(name);
+
+        try {
+            playerService.save(player);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        // TODO: implement game creation
+        UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+        URI createdUri = ub.
+                path(player.getId()).
+                build();
+        return Response.created(createdUri).build();
     }
 
-    public String getId() {
-        return id;
+    /**
+     * Get a player's profile
+     *
+     * @param id UUID for player
+     * @return PlayerEntity for player profile
+     */
+    @GET
+    @Path("{id}")
+    public PlayerEntity getPlayer(
+            @PathParam("id") String id) {
+        Player player;
+        try {
+            player = playerService.findById(id);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        return new PlayerEntity(player);
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

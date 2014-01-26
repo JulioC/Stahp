@@ -1,50 +1,80 @@
 package Stahp.resource;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import Stahp.entity.GameEntity;
+import Stahp.persistence.service.PlayerService;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement
+@Path("games")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class GameResource {
 
-    private String id;
+    private final Logger logger = Logger.getLogger(GameResource.class.getName());
 
-    private String state;
+    private PlayerService playerService;
 
-    private List<PlayerResource> playerEntities;
-
-    public GameResource() {
-        playerEntities = new ArrayList<PlayerResource>();
+    @Autowired
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
-    public GameResource(String id, String state) {
-        this.id = id;
-        this.state = state;
+    @Context
+    private UriInfo uriInfo;
 
-        playerEntities = new ArrayList<PlayerResource>();
+    @NotNull @QueryParam("key")
+    private String currentPlayerKey;
+
+    /**
+     * Get the game list for a player or for the logged player
+     *
+     * @param playerId optional target player
+     * @return list of GameResources
+     */
+    @GET
+    public List<GameEntity> getGameList(
+            @QueryParam("player") String playerId) {
+        if(playerId == null) {
+            playerId = currentPlayerKey;
+        }
+
+        // TODO: implement game listing by player
+        return new ArrayList<GameEntity>();
     }
 
-    public String getId() {
-        return id;
+    /**
+     * Create a new game
+     *
+     * @return Response 201 with created game location
+     */
+    @POST
+    public Response createGame() {
+        // TODO: implement game creation
+        UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+        URI createdUri = ub.
+                path("id").
+                build();
+        return Response.created(createdUri).build();
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public List<PlayerResource> getPlayerEntities() {
-        return playerEntities;
-    }
-
-    public void setPlayerEntities(List<PlayerResource> playerEntities) {
-        this.playerEntities = playerEntities;
+    /**
+     * Game details related requests
+     *
+     * @param gameId target game's id
+     * @return
+     */
+    @Path("{id}")
+    public GameInfoResource gameInfo(
+            @PathParam("id") String gameId) {
+        return new GameInfoResource(currentPlayerKey, gameId);
     }
 }
+
+
+
