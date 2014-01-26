@@ -1,5 +1,7 @@
 package Stahp.resource;
 
+import Stahp.persistence.dto.Player;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -10,6 +12,11 @@ public class PlayerResource {
     private String name;
 
     public PlayerResource() {
+    }
+
+    public PlayerResource(Player player) {
+        uuid = player.getUuid();
+        name = player.getName();
     }
 
     public String getUuid() {

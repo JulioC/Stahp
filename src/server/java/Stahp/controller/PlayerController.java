@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("players")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PlayerController {
 
     private final Logger logger = Logger.getLogger(GameController.class.getName());
@@ -26,28 +26,36 @@ public class PlayerController {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public PlayerResource newPlayer(
             @NotNull @QueryParam("name") String name) {
         Player player = new Player(name);
 
         try {
             playerService.save(player);
-
-            List<Player> players = playerService.findAll();
-            for (Player p: players) {
-                logger.debug(p.getUuid() + " "  + p.getName());
-            }
         }
         catch (Exception e) {
             logger.error(e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        PlayerResource playerResource = new PlayerResource();
-        playerResource.setUuid(player.getUuid());
-        playerResource.setName(player.getName());
-        return playerResource;
+        return new PlayerResource(player);
     }
+
+    @GET
+    @Path("{uuid}")
+    public PlayerResource getPlayer(
+            @PathParam("uuid") String uuid) {
+        Player player;
+        try {
+            player = playerService.findById(uuid);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        return new PlayerResource(player);
+    }
+
 
 }
