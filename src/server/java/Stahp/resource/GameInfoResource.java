@@ -1,9 +1,10 @@
 package Stahp.resource;
 
 import Stahp.entity.GameEntity;
-import Stahp.persistence.service.PlayerService;
+import Stahp.persistence.dto.Game;
+import Stahp.persistence.dto.Player;
+import Stahp.persistence.service.GameService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,29 +12,25 @@ import javax.ws.rs.Path;
 
 public class GameInfoResource {
 
-    private final Logger logger = Logger.getLogger(GameResource.class.getName());
+    private final Logger logger = Logger.getLogger(GameInfoResource.class.getName());
 
-    private PlayerService playerService;
+    private GameService gameService;
 
-    @Autowired
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
+    public void setGameService(GameService gameService) {
+        this.gameService = gameService;
     }
 
-    private String currentPlayerKey;
-    private String gameId;
+    private Player currentPlayer;
+    private Game game;
 
-    public GameInfoResource(String currentPlayerKey, String gameId) {
-        this.currentPlayerKey = currentPlayerKey;
-        this.gameId = gameId;
+    public GameInfoResource(Player currentPlayer, Game game) {
+        this.currentPlayer = currentPlayer;
+        this.game = game;
     }
 
     @GET
     public GameEntity getGameInfo() {
-        // TODO: implement game state change
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(gameId);
-        return gameEntity;
+        return new GameEntity(game);
     }
 
     /**
@@ -43,10 +40,7 @@ public class GameInfoResource {
      */
     @POST
     public GameEntity changeGameState() {
-        // TODO: implement game state change
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(gameId);
-        return gameEntity;
+        return new GameEntity(game);
     }
 
     /**
@@ -56,6 +50,8 @@ public class GameInfoResource {
      */
     @Path("words")
     public GameWordResource gameWords() {
-        return new GameWordResource(currentPlayerKey, gameId);
+        GameWordResource gameWordResource = new GameWordResource(currentPlayer, game);
+        gameWordResource.setGameService(gameService);
+        return gameWordResource;
     }
 }

@@ -1,25 +1,25 @@
 package Stahp.resource;
 
-import Stahp.persistence.service.PlayerService;
+import Stahp.persistence.dto.Game;
+import Stahp.persistence.dto.Player;
+import Stahp.persistence.service.GameService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class GameWordResource {
-    private final Logger logger = Logger.getLogger(GameResource.class.getName());
+    private final Logger logger = Logger.getLogger(GameWordResource.class.getName());
 
-    private PlayerService playerService;
+    private GameService gameService;
 
-    @Autowired
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
+    public void setGameService(GameService gameService) {
+        this.gameService = gameService;
     }
 
-    private String currentPlayerKey;
-    private String gameId;
+    private Game game;
+    private Player currentPlayer;
 
-    public GameWordResource(String currentPlayerKey, String gameId) {
-        this.currentPlayerKey = currentPlayerKey;
-        this.gameId = gameId;
+    public GameWordResource(Player currentPlayer, Game game) {
+        this.currentPlayer = currentPlayer;
+        this.game = game;
     }
 
     // TODO: implement word list related methods

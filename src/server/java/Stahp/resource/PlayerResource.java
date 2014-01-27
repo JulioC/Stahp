@@ -16,7 +16,7 @@ import java.net.URI;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PlayerResource {
 
-    private final Logger logger = Logger.getLogger(GameResource.class.getName());
+    private final Logger logger = Logger.getLogger(PlayerResource.class.getName());
 
     private PlayerService playerService;
 
@@ -29,14 +29,14 @@ public class PlayerResource {
     private UriInfo uriInfo;
 
     /**
-     * Create a new player
+     * Create a new currentPlayer
      *
      * @param name desired display name
-     * @return Response 201 with created player location
+     * @return Response 201 with created currentPlayer location
      */
     @POST
     public Response createPlayer(
-            @NotNull @QueryParam("name") String name) {
+            @NotNull @FormParam("name") String name) {
         Player player = new Player(name);
 
         try {
@@ -47,7 +47,6 @@ public class PlayerResource {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        // TODO: implement game creation
         UriBuilder ub = uriInfo.getAbsolutePathBuilder();
         URI createdUri = ub.
                 path(player.getId()).
@@ -56,10 +55,10 @@ public class PlayerResource {
     }
 
     /**
-     * Get a player's profile
+     * Get a currentPlayer's profile
      *
-     * @param id UUID for player
-     * @return PlayerEntity for player profile
+     * @param id UUID for currentPlayer
+     * @return PlayerEntity for currentPlayer profile
      */
     @GET
     @Path("{id}")
@@ -72,6 +71,10 @@ public class PlayerResource {
         catch (Exception e) {
             logger.error(e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        if(player == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
         return new PlayerEntity(player);

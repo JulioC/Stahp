@@ -1,5 +1,7 @@
 package Stahp.entity;
 
+import Stahp.persistence.dto.Game;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +19,9 @@ public class GameEntity {
         playerEntities = new ArrayList<PlayerEntity>();
     }
 
-    public GameEntity(String id, String state) {
-        this.id = id;
-        this.state = state;
+    public GameEntity(Game game) {
+        this.id = game.getId();
+        this.state = "null";
 
         playerEntities = new ArrayList<PlayerEntity>();
     }

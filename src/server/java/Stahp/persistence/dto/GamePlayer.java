@@ -8,31 +8,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="player")
-public class Player {
+@Table(name="game_player")
+public class GamePlayer {
     @Id
     @GeneratedValue(generator="uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    private String name;
+//    @ManyToOne(fetch= FetchType.LAZY)
+//    @JoinColumn(name="PLAYER")
+//    private Player player;
+//
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name="GAME")
+//    private Game game;
 
-    public Player() {
-    }
-
-    public Player(String name) {
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

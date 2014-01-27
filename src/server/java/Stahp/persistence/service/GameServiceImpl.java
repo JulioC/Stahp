@@ -1,7 +1,7 @@
 package Stahp.persistence.service;
 
-import Stahp.persistence.dao.PlayerDAO;
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.dao.GameDAO;
+import Stahp.persistence.dto.Game;
 import com.googlecode.genericdao.search.ISearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,32 +11,32 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PlayerServiceImpl implements PlayerService {
+public class GameServiceImpl implements GameService {
 
-    PlayerDAO dao;
+    GameDAO dao;
 
     @Autowired
-    public void setDao(PlayerDAO dao) {
+    public void setDao(GameDAO dao) {
         this.dao = dao;
     }
 
     @Override
-    public void save(Player player) {
-        dao.save(player);
+    public void save(Game game) {
+        dao.save(game);
     }
 
     @Override
-    public List<Player> findAll() {
+    public List<Game> findAll() {
         return dao.findAll();
     }
 
     @Override
-    public Player findById(String id) {
+    public Game findById(String id) {
         return dao.find(id);
     }
 
     @Override
-    public List<Player> search(ISearch search) {
+    public List<Game> search(ISearch search) {
         return dao.search(search);
     }
 
