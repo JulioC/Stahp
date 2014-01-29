@@ -1,6 +1,4 @@
-package Stahp.persistence.dto;
-
-import org.hibernate.annotations.GenericGenerator;
+package Stahp.persistence.model;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -9,9 +7,8 @@ import java.util.Objects;
 @Table(name="match_player")
 public class MatchPlayer {
     @Id
-    @GeneratedValue(generator="uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @GeneratedValue
+    private Integer id;
 
     @ManyToOne(fetch= FetchType.LAZY)
     private Player player;

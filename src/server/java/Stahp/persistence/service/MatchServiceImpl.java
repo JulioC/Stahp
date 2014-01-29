@@ -1,7 +1,7 @@
 package Stahp.persistence.service;
 
 import Stahp.persistence.dao.MatchDAO;
-import Stahp.persistence.dto.Match;
+import Stahp.persistence.model.Match;
 import com.googlecode.genericdao.search.ISearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,12 +2,13 @@ package Stahp.resource;
 
 import Stahp.entity.MatchEntity;
 import Stahp.game.GameController;
-import Stahp.persistence.dto.Match;
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Match;
+import Stahp.persistence.model.Player;
 import Stahp.persistence.service.MatchService;
 import Stahp.persistence.service.PlayerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -42,6 +43,9 @@ public class MatchResource {
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
+
+    @Autowired
+    private AutowireCapableBeanFactory beanFactory;
 
     @Context
     private UriInfo uriInfo;
@@ -148,8 +152,7 @@ public class MatchResource {
         }
 
         MatchInfoResource matchInfoResource = new MatchInfoResource(currentPlayer, match);
-        matchInfoResource.setMatchService(matchService);
-        matchInfoResource.setGameController(gameController);
+        beanFactory.autowireBean(matchInfoResource);
         return matchInfoResource;
     }
 }

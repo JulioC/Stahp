@@ -1,6 +1,6 @@
 package Stahp.entity;
 
-import Stahp.persistence.dto.Match;
+import Stahp.persistence.model.Match;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;

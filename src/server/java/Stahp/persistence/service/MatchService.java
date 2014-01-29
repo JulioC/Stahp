@@ -1,6 +1,6 @@
 package Stahp.persistence.service;
 
-import Stahp.persistence.dto.Match;
+import Stahp.persistence.model.Match;
 import com.googlecode.genericdao.search.ISearch;
 import org.springframework.transaction.annotation.Transactional;
 

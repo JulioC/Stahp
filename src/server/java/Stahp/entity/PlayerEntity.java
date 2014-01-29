@@ -1,6 +1,6 @@
 package Stahp.entity;
 
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Player;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -1,6 +1,6 @@
 package Stahp.persistence.service;
 
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Player;
 import com.googlecode.genericdao.search.ISearch;
 import org.springframework.transaction.annotation.Transactional;
 

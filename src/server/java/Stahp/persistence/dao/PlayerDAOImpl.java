@@ -1,6 +1,6 @@
 package Stahp.persistence.dao;
 
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Player;
 import org.springframework.stereotype.Repository;
 
 @Repository

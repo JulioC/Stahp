@@ -1,6 +1,5 @@
-package Stahp.persistence.dto;
+package Stahp.persistence.model;
 
-import Stahp.game.MatchStatus;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,11 +7,18 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="match")
+@Table(name="matches")
 public class Match {
+    public static enum Status {
+        CREATED,
+        STARTED,
+        FINISHED
+    }
+
     @Id
     @GeneratedValue(generator="uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -22,7 +28,10 @@ public class Match {
 
     private Date updated;
 
-    private MatchStatus status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    private Integer timeLimit;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Player creator;
@@ -31,12 +40,17 @@ public class Match {
     @Cascade(CascadeType.SAVE_UPDATE)
     private Set<MatchPlayer> players = new HashSet<MatchPlayer>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Challenge> challengeList;
+
     public Match() {
     }
 
-    public Match(Player creator) {
+    public Match(Player creator, Integer timeLimit) {
         this.creator = creator;
-        this.status = MatchStatus.CREATED;
+        this.timeLimit = timeLimit;
+
+        this.status = Status.CREATED;
     }
 
     @PrePersist
@@ -61,6 +75,10 @@ public class Match {
         return updated;
     }
 
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
     public Player getCreator() {
         return creator;
     }
@@ -76,11 +94,19 @@ public class Match {
         players.add(matchPlayer);
     }
 
-    public MatchStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(MatchStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Challenge> getChallengeList() {
+        return challengeList;
+    }
+
+    public void setChallengeList(List<Challenge> challengeList) {
+        this.challengeList = challengeList;
     }
 }

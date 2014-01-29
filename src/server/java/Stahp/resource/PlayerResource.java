@@ -2,7 +2,7 @@ package Stahp.resource;
 
 
 import Stahp.entity.PlayerEntity;
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Player;
 import Stahp.persistence.service.PlayerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

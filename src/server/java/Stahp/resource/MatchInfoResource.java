@@ -1,12 +1,14 @@
 package Stahp.resource;
 
 import Stahp.entity.MatchEntity;
+import Stahp.game.ChallengeSelector;
+import Stahp.game.DummyChallengeSelector;
 import Stahp.game.GameController;
-import Stahp.game.MatchStatus;
-import Stahp.persistence.dto.Match;
-import Stahp.persistence.dto.Player;
+import Stahp.persistence.model.Match;
+import Stahp.persistence.model.Player;
 import Stahp.persistence.service.MatchService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,12 +21,14 @@ public class MatchInfoResource {
 
     private MatchService matchService;
 
+    @Autowired
     public void setMatchService(MatchService matchService) {
         this.matchService = matchService;
     }
 
     private GameController gameController;
 
+    @Autowired
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
@@ -49,12 +53,13 @@ public class MatchInfoResource {
      */
     @POST
     public MatchEntity updateMatch() {
-        if(match.getStatus() != MatchStatus.CREATED){
+        if(match.getStatus() != Match.Status.CREATED){
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         if(match.getCreator() == currentPlayer) {
-            gameController.startMatch(match);
+            ChallengeSelector challengeSelector = new DummyChallengeSelector();
+            gameController.startMatch(match, challengeSelector);
         }
         else {
             gameController.joinMatch(currentPlayer, match);

@@ -1,6 +1,6 @@
 package Stahp.persistence.dao;
 
-import Stahp.persistence.dto.Match;
+import Stahp.persistence.model.Match;
 import org.springframework.stereotype.Repository;
 
 @Repository

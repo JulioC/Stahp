@@ -1,4 +1,4 @@
-package Stahp.persistence.dto;
+package Stahp.persistence.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="player")
+@Table(name="players")
 public class Player {
     @Id
     @GeneratedValue(generator="uuid")
