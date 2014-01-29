@@ -1,9 +1,10 @@
 package Stahp.resource;
 
-import Stahp.entity.GameEntity;
-import Stahp.persistence.dto.Game;
+import Stahp.entity.MatchEntity;
+import Stahp.game.GameController;
+import Stahp.persistence.dto.Match;
 import Stahp.persistence.dto.Player;
-import Stahp.persistence.service.GameService;
+import Stahp.persistence.service.MatchService;
 import Stahp.persistence.service.PlayerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("games")
+@Path("matches")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class GameResource {
+public class MatchResource {
 
-    private final Logger logger = Logger.getLogger(GameResource.class.getName());
+    private final Logger logger = Logger.getLogger(MatchResource.class.getName());
 
     private PlayerService playerService;
 
@@ -28,11 +29,18 @@ public class GameResource {
         this.playerService = playerService;
     }
 
-    private GameService gameService;
+    private MatchService matchService;
 
     @Autowired
-    public void setGameService(GameService gameService) {
-        this.gameService = gameService;
+    public void setMatchService(MatchService matchService) {
+        this.matchService = matchService;
+    }
+
+    private GameController gameController;
+
+    @Autowired
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 
     @Context
@@ -48,7 +56,7 @@ public class GameResource {
      * @return list of GameResources
      */
     @GET
-    public List<GameEntity> getGameList(
+    public List<MatchEntity> getGameList(
             @QueryParam("player") String playerId) {
         Player player;
         if(playerId != null) {
@@ -69,7 +77,7 @@ public class GameResource {
         }
 
         // TODO: implement game listing by currentPlayer
-        return new ArrayList<GameEntity>();
+        return new ArrayList<MatchEntity>();
     }
 
     /**
@@ -78,13 +86,13 @@ public class GameResource {
      * @return Response 201 with created game location
      */
     @POST
-    public Response createGame() {
+    public Response createMatch() {
         Player currentPlayer = getCurrentPlayer();
-        Game game;
+        Match match;
 
         try {
-            game = new Game(currentPlayer);
-            gameService.save(game);
+            match = gameController.createMatch(currentPlayer);
+            matchService.save(match);
         }
         catch (Exception e) {
             logger.error(e);
@@ -93,37 +101,9 @@ public class GameResource {
 
         UriBuilder ub = uriInfo.getAbsolutePathBuilder();
         URI createdUri = ub.
-                path(game.getId()).
+                path(match.getId()).
                 build();
         return Response.created(createdUri).build();
-    }
-
-    /**
-     * Game details related requests
-     *
-     * @param gameId target game's id
-     * @return
-     */
-    @Path("{id}")
-    public GameInfoResource gameInfo(
-            @PathParam("id") String gameId) {
-        Player currentPlayer = getCurrentPlayer();
-        Game game;
-        try {
-            game = gameService.findById(gameId);
-        }
-        catch (Exception e) {
-            logger.error(e);
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        if(game == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-
-        GameInfoResource gameInfoResource = new GameInfoResource(currentPlayer, game);
-        gameInfoResource.setGameService(gameService);
-        return gameInfoResource;
     }
 
     private Player getCurrentPlayer() {
@@ -142,6 +122,35 @@ public class GameResource {
         }
 
         return currentPlayer;
+    }
+
+    /**
+     * Match details related requests
+     *
+     * @param matchId target match's id
+     * @return
+     */
+    @Path("{id}")
+    public MatchInfoResource matchInfo(
+            @PathParam("id") String matchId) {
+        Player currentPlayer = getCurrentPlayer();
+        Match match;
+        try {
+            match = matchService.findById(matchId);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        if(match == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        MatchInfoResource matchInfoResource = new MatchInfoResource(currentPlayer, match);
+        matchInfoResource.setMatchService(matchService);
+        matchInfoResource.setGameController(gameController);
+        return matchInfoResource;
     }
 }
 

@@ -1,13 +1,13 @@
 package Stahp.entity;
 
-import Stahp.persistence.dto.Game;
+import Stahp.persistence.dto.Match;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
-public class GameEntity {
+public class MatchEntity {
 
     private String id;
 
@@ -15,12 +15,12 @@ public class GameEntity {
 
     private List<PlayerEntity> playerEntities;
 
-    public GameEntity() {
+    public MatchEntity() {
         playerEntities = new ArrayList<PlayerEntity>();
     }
 
-    public GameEntity(Game game) {
-        this.id = game.getId();
+    public MatchEntity(Match match) {
+        this.id = match.getId();
         this.state = "null";
 
         playerEntities = new ArrayList<PlayerEntity>();

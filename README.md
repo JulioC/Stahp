@@ -1,14 +1,14 @@
-/game
-  POST - Create a new game
-  GET - Get your game list
-/game/{game}
-  GET - Get game info
-  POST - Apply (or start) a game
-/game/{game}/words (?)
-  GET - Get the game's word list
+/match
+  POST - Create a new match
+  GET - Get your match list
+/match/{match}
+  GET - Get match info
+  POST - Apply (or start) a match
+/match/{match}/words (?)
+  GET - Get the match's word list
   PUT - Send a player's word list
   POST - Get the for a word list
-/game/{game}/words/{player} (?)
+/match/{match}/words/{player} (?)
   GET - Get a player's word list
 
 /player

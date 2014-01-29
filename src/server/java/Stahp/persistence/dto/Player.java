@@ -17,6 +17,9 @@ public class Player {
 
     private String name;
 
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "player")
+//    private Set<MatchPlayer> games = new HashSet<MatchPlayer>();
+
     public Player() {
     }
 
@@ -35,4 +38,8 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public Set<MatchPlayer> getGames() {
+//        return games;
+//    }
 }

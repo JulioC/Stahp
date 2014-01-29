@@ -1,21 +1,21 @@
 package Stahp.persistence.service;
 
-import Stahp.persistence.dto.Game;
+import Stahp.persistence.dto.Match;
 import com.googlecode.genericdao.search.ISearch;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Transactional
-public interface GameService {
+public interface MatchService {
 
-    public void save(Game game);
+    public void save(Match match);
 
-    public List<Game> findAll();
+    public List<Match> findAll();
 
-    public Game findById(String id);
+    public Match findById(String id);
 
-    public List<Game> search(ISearch search);
+    public List<Match> search(ISearch search);
 
     public void delete(String id);
 
