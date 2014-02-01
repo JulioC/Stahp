@@ -9,7 +9,7 @@ public class Challenge {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     private Topic topic;
 
     private Character initial;

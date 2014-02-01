@@ -1,6 +1,7 @@
 package Stahp.entity;
 
 import Stahp.persistence.model.Match;
+import Stahp.persistence.model.MatchPlayer;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ public class MatchEntity {
 
     private String id;
 
-    private String state;
+    private String status;
+
+    private PlayerEntity creator;
 
     private List<PlayerEntity> playerEntities;
 
@@ -21,9 +24,13 @@ public class MatchEntity {
 
     public MatchEntity(Match match) {
         this.id = match.getId();
-        this.state = "null";
+        this.status = match.getStatus().name();
+        this.creator = new PlayerEntity(match.getCreator());
 
         playerEntities = new ArrayList<PlayerEntity>();
+        for(MatchPlayer matchPlayer: match.getPlayers()) {
+            playerEntities.add(new PlayerEntity(matchPlayer.getPlayer()));
+        }
     }
 
     public String getId() {
@@ -34,12 +41,12 @@ public class MatchEntity {
         this.id = id;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<PlayerEntity> getPlayerEntities() {

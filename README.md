@@ -25,7 +25,7 @@ Player
 
 Game
 - public
-- state (created, started, finished)
+- status (created, started, finished)
 
 WordQuery
 - letter

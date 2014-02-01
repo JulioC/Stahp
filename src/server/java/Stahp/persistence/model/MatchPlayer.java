@@ -10,13 +10,17 @@ public class MatchPlayer {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne
     private Player player;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     private Match match;
 
     private Integer score;
+
+    public MatchPlayer() {
+
+    }
 
     public MatchPlayer(Match match, Player player) {
         this.match = match;
@@ -28,10 +32,10 @@ public class MatchPlayer {
         if(obj instanceof MatchPlayer) {
             MatchPlayer matchPlayer = (MatchPlayer) obj;
 
-            if(matchPlayer.player != player) {
+            if(!matchPlayer.player.equals(player)) {
                 return false;
             }
-            if(matchPlayer.match != match) {
+            if(!matchPlayer.match.equals(match)) {
                 return false;
             }
 
@@ -44,5 +48,17 @@ public class MatchPlayer {
     @Override
     public int hashCode() {
         return Objects.hash(match, player);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public Integer getScore() {
+        return score;
     }
 }

@@ -3,9 +3,11 @@ package Stahp.game;
 import Stahp.persistence.model.Challenge;
 import Stahp.persistence.model.Match;
 import Stahp.persistence.model.Player;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class GameController {
 
     private static Integer matchTimeLimit = 60;
@@ -21,6 +23,7 @@ public class GameController {
     public void startMatch(Match match, ChallengeSelector challengeSelector) {
         List<Challenge> challengeList = challengeSelector.generateList(challengeListSize);
         match.setChallengeList(challengeList);
+
         match.setStatus(Match.Status.STARTED);
     }
 

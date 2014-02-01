@@ -14,7 +14,7 @@ public class Word {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne
     private Challenge challenge;
 
     private String word;

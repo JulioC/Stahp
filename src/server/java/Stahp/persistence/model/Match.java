@@ -5,10 +5,7 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="matches")
@@ -33,14 +30,14 @@ public class Match {
 
     private Integer timeLimit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Player creator;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "match")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "match")
     @Cascade(CascadeType.SAVE_UPDATE)
     private Set<MatchPlayer> players = new HashSet<MatchPlayer>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch=FetchType.EAGER)
     private List<Challenge> challengeList;
 
     public Match() {
@@ -61,6 +58,26 @@ public class Match {
     @PreUpdate
     protected void onUpdate() {
         updated = new Date();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Match) {
+            Match match = (Match) obj;
+
+            if(!match.id.equals(id)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public String getId() {

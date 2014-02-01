@@ -18,12 +18,8 @@ public class PlayerResource {
 
     private final Logger logger = Logger.getLogger(PlayerResource.class.getName());
 
-    private PlayerService playerService;
-
     @Autowired
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
-    }
+    private PlayerService playerService;
 
     @Context
     private UriInfo uriInfo;

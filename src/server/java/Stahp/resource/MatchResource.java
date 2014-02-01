@@ -4,11 +4,11 @@ import Stahp.entity.MatchEntity;
 import Stahp.game.GameController;
 import Stahp.persistence.model.Match;
 import Stahp.persistence.model.Player;
+import Stahp.persistence.service.ChallengeService;
 import Stahp.persistence.service.MatchService;
 import Stahp.persistence.service.PlayerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -23,29 +23,17 @@ public class MatchResource {
 
     private final Logger logger = Logger.getLogger(MatchResource.class.getName());
 
+    @Autowired
     private PlayerService playerService;
 
     @Autowired
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
-    }
-
     private MatchService matchService;
 
     @Autowired
-    public void setMatchService(MatchService matchService) {
-        this.matchService = matchService;
-    }
-
     private GameController gameController;
 
     @Autowired
-    public void setGameController(GameController gameController) {
-        this.gameController = gameController;
-    }
-
-    @Autowired
-    private AutowireCapableBeanFactory beanFactory;
+    private ChallengeService challengeService;
 
     @Context
     private UriInfo uriInfo;
@@ -134,9 +122,9 @@ public class MatchResource {
      * @param matchId target match's id
      * @return
      */
-    @Path("{id}")
+    @Path("{matchId}")
     public MatchInfoResource matchInfo(
-            @PathParam("id") String matchId) {
+            @PathParam("matchId") String matchId) {
         Player currentPlayer = getCurrentPlayer();
         Match match;
         try {
@@ -151,8 +139,14 @@ public class MatchResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        MatchInfoResource matchInfoResource = new MatchInfoResource(currentPlayer, match);
-        beanFactory.autowireBean(matchInfoResource);
+        MatchInfoResource matchInfoResource;
+        matchInfoResource = new MatchInfoResource(currentPlayer, match);
+
+        // TODO: Autowire this class
+        matchInfoResource.setChallengeService(challengeService);
+        matchInfoResource.setGameController(gameController);
+        matchInfoResource.setMatchService(matchService);
+
         return matchInfoResource;
     }
 }
