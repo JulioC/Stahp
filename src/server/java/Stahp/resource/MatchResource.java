@@ -3,6 +3,7 @@ package Stahp.resource;
 import Stahp.entity.MatchEntity;
 import Stahp.game.GameController;
 import Stahp.persistence.model.Match;
+import Stahp.persistence.model.MatchPlayer;
 import Stahp.persistence.model.Player;
 import Stahp.persistence.service.ChallengeService;
 import Stahp.persistence.service.MatchService;
@@ -68,8 +69,12 @@ public class MatchResource {
             player = getCurrentPlayer();
         }
 
-        // TODO: implement game listing by currentPlayer
-        return new ArrayList<MatchEntity>();
+        ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
+        for(MatchPlayer matchPlayer: player.getMatches()) {
+            list.add(new MatchEntity(matchPlayer.getMatch()));
+        }
+
+        return list;
     }
 
     /**

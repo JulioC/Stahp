@@ -2,11 +2,10 @@ package Stahp.persistence.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="players")
@@ -18,8 +17,8 @@ public class Player {
 
     private String name;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "player")
-//    private Set<MatchPlayer> games = new HashSet<MatchPlayer>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "player")
+    private Set<MatchPlayer> matches = new HashSet<MatchPlayer>();
 
     public Player() {
     }
@@ -60,7 +59,7 @@ public class Player {
         this.name = name;
     }
 
-//    public Set<MatchPlayer> getGames() {
-//        return games;
-//    }
+    public Set<MatchPlayer> getMatches() {
+        return matches;
+    }
 }
