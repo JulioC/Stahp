@@ -1,6 +1,10 @@
 package Stahp.persistence.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +21,13 @@ public class MatchPlayer {
     private Match match;
 
     private Integer score;
+
+    // TODO: these words should have some stats about it's score
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @CollectionTable(name="match_player_words", joinColumns=@JoinColumn(name="match_player"))
+    @Column(name="word")
+    private List<String> words;
 
     public MatchPlayer() {
 
@@ -60,5 +71,17 @@ public class MatchPlayer {
 
     public Integer getScore() {
         return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public List<String> getWords() {
+        return words;
+    }
+
+    public void setWords(List<String> words) {
+        this.words = words;
     }
 }

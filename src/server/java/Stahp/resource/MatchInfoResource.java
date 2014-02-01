@@ -1,6 +1,5 @@
 package Stahp.resource;
 
-import Stahp.entity.ChallengeEntity;
 import Stahp.entity.MatchEntity;
 import Stahp.game.GameController;
 import Stahp.game.RandomChallengeSelector;
@@ -12,13 +11,8 @@ import Stahp.persistence.service.MatchService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MatchInfoResource {
 
@@ -41,6 +35,11 @@ public class MatchInfoResource {
         this.match = match;
     }
 
+    /**
+     * Get the match information
+     *
+     * @return the MatchEntity
+     */
     @GET
     public MatchEntity getMatchInfo() {
         try {
@@ -77,6 +76,10 @@ public class MatchInfoResource {
             }
         }
         else {
+            if(gameController.isPlayerInMatch(currentPlayer, match)) {
+                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            }
+
             gameController.joinMatch(currentPlayer, match);
         }
 
@@ -86,18 +89,20 @@ public class MatchInfoResource {
     }
 
     @Path("words")
-    @GET
-    public List<ChallengeEntity> getChallenges() {
+    public MatchWordResource matchWords(
+            @PathParam("matchId") String matchId) {
         if(match == null || match.getChallengeList().isEmpty()){
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        ArrayList<ChallengeEntity> challengeEntityList = new ArrayList<ChallengeEntity>();
-        for(Challenge challenge: match.getChallengeList()) {
-            challengeEntityList.add(new ChallengeEntity(challenge));
-        }
+        MatchWordResource matchWordResource;
+        matchWordResource = new MatchWordResource(currentPlayer, match);
 
-        return challengeEntityList;
+        // TODO: Autowire this class
+        matchWordResource.setGameController(gameController);
+        matchWordResource.setMatchService(matchService);
+
+        return matchWordResource;
     }
 
     public void setMatchService(MatchService matchService) {

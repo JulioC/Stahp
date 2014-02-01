@@ -23,12 +23,13 @@ public class RandomChallengeSelector implements ChallengeSelector {
         Random rand = new Random();
         int n = list.size();
 
+        //
         ArrayList<Challenge> selection = new ArrayList<Challenge>();
         for(int i = 0; i < size; ++i) {
             int r = rand.nextInt(n);
             selection.add(list.get(r));
         }
 
-        return list;
+        return selection;
     }
 }

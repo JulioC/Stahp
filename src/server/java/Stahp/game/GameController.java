@@ -2,6 +2,7 @@ package Stahp.game;
 
 import Stahp.persistence.model.Challenge;
 import Stahp.persistence.model.Match;
+import Stahp.persistence.model.MatchPlayer;
 import Stahp.persistence.model.Player;
 import org.springframework.stereotype.Repository;
 
@@ -31,5 +32,71 @@ public class GameController {
         match.addPlayer(player);
     }
 
+    public boolean isPlayerInMatch(Player player, Match match) {
+        if(getMatchPlayer(player, match) == null) {
+            return false;
+        }
 
+        return true;
+    }
+
+    public boolean playerResponded(Player player, Match match) {
+        MatchPlayer matchPlayer = getMatchPlayer(player, match);
+
+        List<String> wordList = matchPlayer.getWords();
+        if(wordList == null || wordList.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean allPlayersResponded(Match match) {
+        for(MatchPlayer matchPlayer: match.getPlayers()) {
+            List<String> wordList = matchPlayer.getWords();
+            if(wordList == null || wordList.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void setResponse(Player player, Match match, List<String> wordList) {
+        MatchPlayer matchPlayer = getMatchPlayer(player, match);
+
+        Integer score = calculateScore(match, wordList);
+
+        matchPlayer.setScore(score);
+        matchPlayer.setWords(wordList);
+
+        if(allPlayersResponded(match)) {
+            match.setStatus(Match.Status.FINISHED);
+        }
+    }
+
+    public MatchPlayer getMatchPlayer(Player player, Match match) {
+        for(MatchPlayer matchPlayer: match.getPlayers()) {
+            if(matchPlayer.getPlayer().equals(player)) {
+                return matchPlayer;
+            }
+        }
+
+        return null;
+    }
+
+    public MatchPlayer getMatchPlayer(String playerId, Match match) {
+        for(MatchPlayer matchPlayer: match.getPlayers()) {
+            if(matchPlayer.getPlayer().getId().equals(playerId)) {
+                return matchPlayer;
+            }
+        }
+
+        return null;
+    }
+
+    // TODO: calculateScore
+    private Integer calculateScore(Match match, List<String> words) {
+        return 99;
+    }
 }
