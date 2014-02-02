@@ -10,7 +10,7 @@
     <context:annotation-config />
 
     <!-- TODO: use a smaller scope for component-scan -->
-    <context:component-scan base-package="Stahp" />
+    <context:component-scan base-package="br.com.thejcs.stahp.server" />
 
     <!-- Definition of persistence properties -->
     <context:property-placeholder location="classpath:target-mysql.properties"/>

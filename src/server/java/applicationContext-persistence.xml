@@ -18,7 +18,7 @@
     <!--  Configure a Hibernate SessionFactory -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="Stahp"/>
+        <property name="packagesToScan" value="br.com.thejcs.stahp.server"/>
         <property name="hibernateProperties">
             <bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
                 <property name="properties">

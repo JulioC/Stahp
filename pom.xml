@@ -7,7 +7,7 @@
     <artifactId>Stahp</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Stahp</name>
+    <name>br.com.thejcs.stahp.server</name>
 
     <dependencyManagement>
         <dependencies>
@@ -48,6 +48,12 @@
             <artifactId>jersey-bean-validation</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
 
         <!-- Spring 3 dependencies -->
         <dependency>
@@ -141,7 +147,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>Stahp.Server</mainClass>
+                    <mainClass>br.com.thejcs.stahp.server.Server</mainClass>
                 </configuration>
             </plugin>
         </plugins>
