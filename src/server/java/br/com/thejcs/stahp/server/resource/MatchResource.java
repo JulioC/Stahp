@@ -8,6 +8,7 @@ import br.com.thejcs.stahp.server.persistence.model.Player;
 import br.com.thejcs.stahp.server.persistence.service.ChallengeService;
 import br.com.thejcs.stahp.server.persistence.service.MatchService;
 import br.com.thejcs.stahp.server.persistence.service.PlayerService;
+import com.googlecode.genericdao.search.Search;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,13 +44,13 @@ public class MatchResource {
     private String currentPlayerKey;
 
     /**
-     * Get the game list for a currentPlayer or for the logged currentPlayer
+     * Get the match list for a currentPlayer or for the logged currentPlayer
      *
      * @param playerId optional target currentPlayer
-     * @return list of GameResources
+     * @return list of MatchEntity
      */
     @GET
-    public List<MatchEntity> getGameList(
+    public List<MatchEntity> getMatchList(
             @QueryParam("player") String playerId) {
         Player player;
         if(playerId != null) {
@@ -72,6 +73,33 @@ public class MatchResource {
         ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
         for(MatchPlayer matchPlayer: player.getMatches()) {
             list.add(new MatchEntity(matchPlayer.getMatch()));
+        }
+
+        return list;
+    }
+
+    /**
+     * Get the match list
+     *
+     * @return list of MatchEntity
+     */
+    @Path("all")
+    @GET
+    public List<MatchEntity> getGameList() {
+        List<Match> matches;
+        try {
+            Search search = new Search();
+            search.addFilterEqual("status", Match.Status.CREATED);
+            matches = matchService.search(search);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
+        for(Match match: matches) {
+            list.add(new MatchEntity(match));
         }
 
         return list;

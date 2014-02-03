@@ -16,10 +16,10 @@ public class MatchEntity {
 
     private PlayerEntity creator;
 
-    private List<PlayerEntity> playerEntities;
+    private List<PlayerEntity> players;
 
     public MatchEntity() {
-        playerEntities = new ArrayList<PlayerEntity>();
+        players = new ArrayList<PlayerEntity>();
     }
 
     public MatchEntity(Match match) {
@@ -27,9 +27,9 @@ public class MatchEntity {
         this.status = match.getStatus().name();
         this.creator = new PlayerEntity(match.getCreator());
 
-        playerEntities = new ArrayList<PlayerEntity>();
+        players = new ArrayList<PlayerEntity>();
         for(MatchPlayer matchPlayer: match.getPlayers()) {
-            playerEntities.add(new PlayerEntity(matchPlayer.getPlayer()));
+            players.add(new PlayerEntity(matchPlayer.getPlayer()));
         }
     }
 
@@ -49,11 +49,19 @@ public class MatchEntity {
         this.status = status;
     }
 
-    public List<PlayerEntity> getPlayerEntities() {
-        return playerEntities;
+    public List<PlayerEntity> getPlayers() {
+        return players;
     }
 
-    public void setPlayerEntities(List<PlayerEntity> playerEntities) {
-        this.playerEntities = playerEntities;
+    public void setPlayers(List<PlayerEntity> players) {
+        this.players = players;
+    }
+
+    public PlayerEntity getCreator() {
+        return creator;
+    }
+
+    public void setCreator(PlayerEntity creator) {
+        this.creator = creator;
     }
 }
