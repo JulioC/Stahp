@@ -11,9 +11,9 @@ import java.util.List;
 @Repository
 public class GameController {
 
-    private static Integer matchTimeLimit = 60;
-
-    private static Integer challengeListSize = 100;
+    // TODO: set the correct value (42?)
+    private static Integer matchTimeLimit = 10;
+    private static Integer challengeListSize = (matchTimeLimit * 2);
 
     public Match createMatch(Player player) {
         Match match = new Match(player, matchTimeLimit);

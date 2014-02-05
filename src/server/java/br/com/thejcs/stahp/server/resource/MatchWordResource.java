@@ -1,7 +1,7 @@
 package br.com.thejcs.stahp.server.resource;
 
 import br.com.thejcs.stahp.server.entity.ChallengeEntity;
-import br.com.thejcs.stahp.server.entity.ResponseEntity;
+import br.com.thejcs.stahp.server.entity.EntryEntity;
 import br.com.thejcs.stahp.server.game.GameController;
 import br.com.thejcs.stahp.server.persistence.model.Challenge;
 import br.com.thejcs.stahp.server.persistence.model.Match;
@@ -47,7 +47,7 @@ public class MatchWordResource {
     }
 
     @POST
-    public ResponseEntity sendWordList(
+    public EntryEntity sendWordList(
             @NotNull @FormParam("words") String words) {
         if(!gameController.isPlayerInMatch(currentPlayer, match)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
@@ -64,19 +64,19 @@ public class MatchWordResource {
         matchService.save(match);
 
         MatchPlayer matchPlayer = gameController.getMatchPlayer(currentPlayer, match);
-        return new ResponseEntity(matchPlayer);
+        return new EntryEntity(matchPlayer);
     }
 
     @Path("{playerId}")
     @GET
-    public ResponseEntity getPlayerResponse(
+    public EntryEntity getPlayerResponse(
             @NotNull @PathParam("playerId") String playerId) {
         MatchPlayer matchPlayer = gameController.getMatchPlayer(playerId, match);
         if(matchPlayer == null) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        return new ResponseEntity(matchPlayer);
+        return new EntryEntity(matchPlayer);
     }
 
     public void setMatchService(MatchService matchService) {

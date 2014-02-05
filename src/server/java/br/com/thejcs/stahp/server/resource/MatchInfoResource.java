@@ -43,7 +43,7 @@ public class MatchInfoResource {
     @GET
     public MatchEntity getMatchInfo() {
         try {
-            return new MatchEntity(match);
+            return new MatchEntity(match, currentPlayer);
         }
         catch (Exception e) {
             logger.error(e);
@@ -85,7 +85,7 @@ public class MatchInfoResource {
 
         matchService.save(match);
 
-        return new MatchEntity(match);
+        return new MatchEntity(match, currentPlayer);
     }
 
     @Path("words")
