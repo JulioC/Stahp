@@ -6,8 +6,10 @@ import br.com.thejcs.stahp.server.persistence.model.Match;
 import br.com.thejcs.stahp.server.persistence.model.MatchPlayer;
 import br.com.thejcs.stahp.server.persistence.model.Player;
 import br.com.thejcs.stahp.server.persistence.service.ChallengeService;
+import br.com.thejcs.stahp.server.persistence.service.MatchPlayerService;
 import br.com.thejcs.stahp.server.persistence.service.MatchService;
 import br.com.thejcs.stahp.server.persistence.service.PlayerService;
+import br.com.thejcs.stahp.server.util.MatchEntityComparator;
 import com.googlecode.genericdao.search.Search;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Path("matches")
@@ -30,6 +33,9 @@ public class MatchResource {
 
     @Autowired
     private MatchService matchService;
+
+    @Autowired
+    private MatchPlayerService matchPlayerService;
 
     @Autowired
     private GameController gameController;
@@ -70,11 +76,28 @@ public class MatchResource {
             player = getCurrentPlayer();
         }
 
-        ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
-        for(MatchPlayer matchPlayer: player.getMatches()) {
-            list.add(new MatchEntity(matchPlayer.getMatch()));
+        List<MatchPlayer> matchPlayerList;
+        try {
+            matchPlayerList = matchPlayerService.findByPlayer(player);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
+        ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
+        for(MatchPlayer matchPlayer: matchPlayerList) {
+            list.add(new MatchEntity(matchPlayer.getMatch(), player));
+        }
+
+        try {
+//            matchPlayerList = matchPlayerService.findByPlayer(player);
+            Collections.sort(list, Collections.reverseOrder(new MatchEntityComparator()));
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
         return list;
     }
 
@@ -85,7 +108,37 @@ public class MatchResource {
      */
     @Path("all")
     @GET
-    public List<MatchEntity> getGameList() {
+    public List<MatchEntity> getMatchList() {
+        Player currentPlayer = getCurrentPlayer();
+
+        List<Match> matches;
+        try {
+            matches = matchService.findAll();
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+
+        ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
+        for(Match match: matches) {
+            list.add(new MatchEntity(match, currentPlayer));
+        }
+
+        Collections.sort(list, Collections.reverseOrder(new MatchEntityComparator()));
+        return list;
+    }
+
+    /**
+     * Get the match list
+     *
+     * @return list of MatchEntity
+     */
+    @Path("open")
+    @GET
+    public List<MatchEntity> getOpenMatchList() {
+        Player currentPlayer = getCurrentPlayer();
+
         List<Match> matches;
         try {
             Search search = new Search();
@@ -99,9 +152,10 @@ public class MatchResource {
 
         ArrayList<MatchEntity> list = new ArrayList<MatchEntity>();
         for(Match match: matches) {
-            list.add(new MatchEntity(match));
+            list.add(new MatchEntity(match, currentPlayer));
         }
 
+        Collections.sort(list, Collections.reverseOrder(new MatchEntityComparator()));
         return list;
     }
 
@@ -128,7 +182,7 @@ public class MatchResource {
         URI createdUri = ub.
                 path(match.getId()).
                 build();
-        return Response.created(createdUri).entity(new MatchEntity(match)).build();
+        return Response.created(createdUri).entity(new MatchEntity(match, currentPlayer)).build();
     }
 
     private Player getCurrentPlayer() {

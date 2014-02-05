@@ -50,16 +50,6 @@ public class Match {
         this.status = Status.CREATED;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        updated = created = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updated = new Date();
-    }
-
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Match) {
@@ -88,8 +78,16 @@ public class Match {
         return created;
     }
 
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
     public Date getUpdated() {
         return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     public Integer getTimeLimit() {
@@ -106,8 +104,6 @@ public class Match {
 
     public void addPlayer(Player player) {
         MatchPlayer matchPlayer = new MatchPlayer(this, player);
-
-//        player.getGames().add(matchPlayer);
         players.add(matchPlayer);
     }
 

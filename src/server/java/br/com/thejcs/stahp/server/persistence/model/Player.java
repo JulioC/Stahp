@@ -2,10 +2,11 @@ package br.com.thejcs.stahp.server.persistence.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="players")
@@ -16,9 +17,6 @@ public class Player {
     private String id;
 
     private String name;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "player")
-    private Set<MatchPlayer> matches = new HashSet<MatchPlayer>();
 
     public Player() {
     }
@@ -57,9 +55,5 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<MatchPlayer> getMatches() {
-        return matches;
     }
 }

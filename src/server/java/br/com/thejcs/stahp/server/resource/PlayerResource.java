@@ -13,7 +13,7 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 
 @Path("players")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class PlayerResource {
 
     private final Logger logger = Logger.getLogger(PlayerResource.class.getName());

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +23,7 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public void save(Match match) {
+        setDates(match);
         dao.save(match);
     }
 
@@ -43,5 +45,14 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public void delete(String id) {
         dao.removeById(id);
+    }
+
+    // TODO: use the right way (r)
+    private void setDates(Match match) {
+        if(match.getId() == null) {
+            match.setCreated(new Date());
+        }
+
+        match.setUpdated(new Date());
     }
 }
